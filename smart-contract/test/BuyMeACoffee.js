@@ -1,4 +1,5 @@
 const { expect } = require("chai");
+const { anyValue } = require("@nomicfoundation/hardhat-chai-matchers/withArgs");
 
 async function getBalance(address) {
       const balanceBigInt = await hre.waffle.provider.getBalance(address);
@@ -39,6 +40,10 @@ describe("BuyMeACoffee", function () {
       await buyMeACoffee.withdrawTips();
       balance = await getBalance(owner.address);
       expect(balance).to.be.closeTo(10009, 2);
+
+       await expect(await buyMeACoffee.connect(tipper).buyCoffee("Carolina", "You're the best!", tip))
+            .to.emit(buyMeACoffee, "NewMemo")
+            .withArgs(tipper.address,anyValue, "Carolina", "You're the best!");
 
 });
 });
