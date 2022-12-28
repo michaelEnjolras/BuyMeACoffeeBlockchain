@@ -29,11 +29,13 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
-      - run: npm run build
+      - run: npm install
+
+      - run: PUBLIC_URL='' npm run build
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         if: ${{ github.ref == 'refs/heads/master' }}
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./
+          publish_dir: ./public
